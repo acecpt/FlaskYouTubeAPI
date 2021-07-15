@@ -107,8 +107,9 @@ class Video(Resource):
         result = VideoModel.query.filter_by(id=video_id).first()
         if not result:
             abort(404, message="Video ID {} does not exist...".format(video_id))
-        del args[video_id]
-        return result, 501 #incomplete delete logic
+        db.session.delete(result)
+        db.session.commit()
+        return result, 204 
 ###        abort_if_video_doesnt_exist(video_id)   ### removed b/c of db creation
 ###        del videos[video_id]
 ###        return '', 204
